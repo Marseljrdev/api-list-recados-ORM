@@ -1,8 +1,8 @@
-import { ErrandEntity } from "../database/entities/errand.entity";
-import { DataBase } from "../database/config/database.connection";
-import { Errand, StatusErrand } from "../models/errand";
-import { User } from "../models/user";
-import { UserRepository } from "./user.repository";
+import { ErrandEntity } from "../../../shared/database/entities/errand.entity";
+import { DataBase } from "../../../../main/database/database.connection";
+import { Errand, StatusErrand } from "../../../models/errand";
+import { User } from "../../../models/user";
+import { UserRepository } from "../../user/repositories/user.repository";
 
 interface ErrandType {
     userId: string;

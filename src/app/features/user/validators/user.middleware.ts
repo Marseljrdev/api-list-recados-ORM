@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse } from "../utils/Api.response.adapter";
+import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
 
 export class UserMiddleware {
   public static validateUser(req: Request, res: Response, next: NextFunction) {

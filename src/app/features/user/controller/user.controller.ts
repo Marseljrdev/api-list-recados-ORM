@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../repositories/user.repository";
-import { ApiResponse } from "../utils/Api.response.adapter";
-import { User } from "../models/user";
+import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
+import { User } from "../../../models/user";
 
 
 export class UserController {

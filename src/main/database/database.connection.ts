@@ -1,4 +1,4 @@
-import config from "./database.config";
+import config from "../config/database.config";
 import {DataSource} from "typeorm";
 
 export class DataBase {

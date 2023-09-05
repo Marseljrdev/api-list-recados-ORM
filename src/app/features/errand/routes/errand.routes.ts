@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ErrandController } from "../controllers/errands.controller";
+import { ErrandController } from "../controller/errands.controller";
 
 export const ErrandRoutes = () => {
     const app = Router({
