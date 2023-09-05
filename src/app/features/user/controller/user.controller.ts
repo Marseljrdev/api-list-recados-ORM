@@ -1,100 +1,70 @@
 import { Request, Response } from "express";
 import { UserRepository } from "../repositories/user.repository";
-import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
+import { HttpResponse } from "../../../shared/utils/http-response.adapter";
 import { User } from "../../../models/user";
-
+import { LoginUserUseCase } from "../usecases/login-user.usecase";
+import { GetUserUseCase } from "../usecases/get-user.usecase";
+import { ListUserUseCase } from "../usecases/list-user.usecase";
+import { CreateUserUseCase } from "../usecases/create-user.usecase";
 
 export class UserController {
   public async create(req: Request, res: Response) {
     try {
       const { name, email, password } = req.body;
-      const repository = new UserRepository();
 
-      const validEmail = await repository.checkEmail(email);
+      const usecase = new CreateUserUseCase();
+      const result = await usecase.execute({ name, email, password });
 
-      if (validEmail) {
-        return ApiResponse.invalid(res, "E-mail");
-      }
-
-      const user = new User(name, email, password);
-      const result = await repository.create(user);
-
-      return ApiResponse.success(
-        res,
-        "User successufully created",
-        result
-      );
+      return res.status(result.code).send(result);
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
-  //ok
   public async listAllUsers(req: Request, res: Response) {
     try {
-      const repository = new UserRepository();
-      const result = await repository.listAllUsers();
+      const usecase = new ListUserUseCase();
+      const result = await usecase.execute();
 
-      if(result.length === 0){
-        return ApiResponse.notFound(res, "Lista de usuario vazia")
-      };
-
-      return ApiResponse.success(
-        res,
-        "Users were sucessfully listed",
-        result.map((user) => user.toJson())
-      );
+      return res.status(result.code).send(result);
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
-  // ok
   public async getUserById(req: Request, res: Response) {
     try {
       const { id } = req.params;
 
-      const repository = new UserRepository();
-      const result = await repository.getById(id);
+      const usecase = new GetUserUseCase();
+      const result = await usecase.execute(id);
 
-      if (!result) {
-        return ApiResponse.notFound(res, "User ");
-      }
-
-      return ApiResponse.success(res, "Login was successfuly",{
-        data: result.toJson()
-       });
+      return res.status(result.code).send(result);
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
-  // ok
   public async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
-      const repository = new UserRepository();
 
       if (!email) {
-        return ApiResponse.fieldNotProvided(res, "E-mail");
+        return HttpResponse.fieldNotProvided(res, "E-mail");
       }
       if (!password) {
-        return ApiResponse.fieldNotProvided(res, "Password");
+        return HttpResponse.fieldNotProvided(res, "Password");
       }
 
-      const user = await  repository.login(email,password);
-
-      if (!user) {
-        return ApiResponse.invalidCredentials(res);
-      }
-
-     
-
-      return ApiResponse.success(res, "Login was successfuly",{
-       data: user.toJson()
+      const usecase = new LoginUserUseCase();
+      const result = await usecase.execute({
+        email,
+        password,
       });
+
+      return res.status(result.code).send(result);
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 }

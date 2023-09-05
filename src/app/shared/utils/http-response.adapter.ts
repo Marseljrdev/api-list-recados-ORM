@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
-export class ApiResponse {
+export class HttpResponse {
   public static success(res: Response, message: string, data: any) {
     return res.status(StatusCodes.OK).send({
       ok: true,

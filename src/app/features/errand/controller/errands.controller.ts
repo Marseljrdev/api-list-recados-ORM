@@ -1,6 +1,6 @@
 import { Errand, StatusErrand } from "../../../models/errand";
 import { Request, Response } from "express";
-import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
+import { HttpResponse } from "../../../shared/utils/http-response.adapter";
 // Constants enumerating the HTTP status codes.
 import { StatusCodes } from "http-status-codes";
 import { UserRepository } from "../../user/repositories/user.repository";
@@ -25,16 +25,16 @@ export class ErrandController {
       const recado = await repository.criarRecado(newErrand);
 
       if(!recado){
-        return ApiResponse.notFound(res, "Erro a criar Recado")
+        return HttpResponse.notFound(res, "Erro a criar Recado")
       }
 
-      return ApiResponse.success(
+      return HttpResponse.success(
         res,
         "Errand was sucessfully created",
         newErrand.toJson()
       );
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
@@ -48,11 +48,11 @@ export class ErrandController {
         type: type as StatusErrand,
       });
 
-      return ApiResponse.success(res, "Errands successfully listed", {
+      return HttpResponse.success(res, "Errands successfully listed", {
         errands: errands.map((errand) => errand.toJson()),
       });
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
@@ -64,7 +64,7 @@ export class ErrandController {
       const user = await new UserRepository().getById(userId);
 
       if (!user) {
-        return ApiResponse.notFound(res, "User");
+        return HttpResponse.notFound(res, "User");
       }
 
       const errandRepository = new ErrandRepository();
@@ -73,7 +73,7 @@ export class ErrandController {
       console.log(errand);
 
       if (!errand) {
-        return ApiResponse.notFound(res, "Errand");
+        return HttpResponse.notFound(res, "Errand");
       }
 
     
@@ -89,13 +89,13 @@ export class ErrandController {
 
       });
 
-      return ApiResponse.success(
+      return HttpResponse.success(
         res,
         "Errand was successfully updated",
         errands.map((errand) => errand.toJson())
       );
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
@@ -106,27 +106,27 @@ export class ErrandController {
       const user = await new UserRepository().getById(userId);
 
       if (!user) {
-        return ApiResponse.notFound(res, "User");
+        return HttpResponse.notFound(res, "User");
       }
 
       const errandRepository = new ErrandRepository();
       const delitedErrands = await errandRepository.delete(idErrand);
 
       if (delitedErrands === 0) {
-        return ApiResponse.notFound(res, "Errand");
+        return HttpResponse.notFound(res, "Errand");
       }
 
       const errands = await errandRepository.listErrands({
         userId,
       });
 
-      return ApiResponse.success(
+      return HttpResponse.success(
         res,
         "Errand successfully deleted",
         errands.map((errand) => errand.toJson())
       );
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 }

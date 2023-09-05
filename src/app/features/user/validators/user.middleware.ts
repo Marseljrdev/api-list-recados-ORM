@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
+import { HttpResponse } from "../../../shared/utils/http-response.adapter";
 
 export class UserMiddleware {
   public static validateUser(req: Request, res: Response, next: NextFunction) {
@@ -30,12 +30,12 @@ export class UserMiddleware {
       const { email } = req.body;
 
       if (!email) {
-        return ApiResponse.fieldNotProvided(res, "E-mail");
+        return HttpResponse.fieldNotProvided(res, "E-mail");
       }
 
       next();
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 
@@ -48,12 +48,12 @@ export class UserMiddleware {
       const { password } = req.body;
 
       if (!password) {
-        return ApiResponse.fieldNotProvided(res, "Password");
+        return HttpResponse.fieldNotProvided(res, "Password");
       }
 
       next();
     } catch (error: any) {
-      return ApiResponse.genericError(res, error);
+      return HttpResponse.genericError(res, error);
     }
   }
 }

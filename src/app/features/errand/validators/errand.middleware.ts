@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { ApiResponse } from "../../../shared/utils/Api.response.adapter";
+import { ApiResponse } from "../../../shared/utils/http-response.adapter";
 import { Errand, StatusErrand } from "../../../models/errand";
 
 export class ErrandMiddleware {
