@@ -1,14 +1,11 @@
 import "reflect-metadata";
 import { DataBase } from "./main/database/database.connection";
 import { Server } from "./main/config/express.config";
+import { RedisCacheDataBase } from "./main/database/redis.connection";
 
 
 
-
-
-// inicializar o banco de dados, antes do listen
-DataBase.connect().then(() => {
-  console.log("Database is connected!");
+Promise.all([DataBase.connect(), RedisCacheDataBase.connect()]).then(() => {
   const app = Server.create();
   Server.listen(app);
-});
+})

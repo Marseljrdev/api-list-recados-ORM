@@ -40,7 +40,7 @@ export class ErrandRepository {
         return result.map((item) => ErrandRepository.mapRowToModel(item));
     }
 
-    public async update(errand: ErrandEntity) {
+    public async update(errand: Errand) {
         const result = await this.repository.update(
             {
                 id: errand.id,
@@ -60,7 +60,7 @@ export class ErrandRepository {
             where: { id: idErrand }
         });
 
-        return result
+        return result ? ErrandRepository.mapRowToModel(result) : undefined
     }
 
     public async delete(id: string) {

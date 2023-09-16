@@ -9,15 +9,17 @@ import { CreateRecadosUseCase } from "../usecases/create-recados.usecase";
 import { ListRecadosUseCase } from "../usecases/list-recados.usecase";
 import { UpdateRecadosUseCase } from "../usecases/update-recados.usecase";
 import { DeleteRecadosUseCase } from "../usecases/delete-recados.usecase";
+import { GetErrandUseCase } from "../usecases/get-recados.usecase";
 
 export class ErrandController {
+  constructor(private createUseCase: CreateRecadosUseCase) {}
+
   public async criarRecado(req: Request, res: Response) {
     try {
       const { userId } = req.params;
       const { title, description, type } = req.body;
 
-      const usecase = new CreateRecadosUseCase();
-      const result = await usecase.execute({
+      const result = await this.createUseCase.execute({
         userId,
         title,
         description,
@@ -42,6 +44,18 @@ export class ErrandController {
     } catch (error: any) {
       return HttpResponse.genericError(res, error);
     }
+  }
+
+  public async get(req: Request, res: Response) {
+    const { userId, idErrand } = req.params;
+
+    const usecase = new GetErrandUseCase();
+    const result = await usecase.execute({
+      userId,
+      idErrand,
+    });
+
+    return res.status(result.code).send(result);
   }
 
   public async update(req: Request, res: Response) {

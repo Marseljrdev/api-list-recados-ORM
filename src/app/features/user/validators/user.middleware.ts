@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { HttpResponse } from "../../../shared/utils/http-response.adapter";
+import { JwtServices } from "../../../shared/services/jwt.services";
 
 export class UserMiddleware {
   public static validateUser(req: Request, res: Response, next: NextFunction) {
@@ -54,6 +55,34 @@ export class UserMiddleware {
       next();
     } catch (error: any) {
       return HttpResponse.genericError(res, error);
+    }
+  }
+
+  public static checkToken(req: Request, res: Response, next: NextFunction){
+    try {
+      //VERIFICAR SE O TOKEN FOI INFORMADO
+      const token = req.headers.authorization;
+
+      if(!token){
+        return HttpResponse.invalidCredentials(res);
+      }
+
+      const jwtservices = new JwtServices();
+
+      //VERIFICAR SE O TOKEN É VALIDO
+      const isValid = jwtservices.verifyToken(token);
+
+      if(!isValid){
+        return HttpResponse.invalidCredentials(res);
+      }
+
+      next();
+      
+    } catch (error) {
+      return res.status(500).send({
+        success: false,
+        error: error
+      })
     }
   }
 }

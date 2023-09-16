@@ -23,6 +23,9 @@ export class UserController {
 
   public async listAllUsers(req: Request, res: Response) {
     try {
+
+      const token = req.headers.authorization;
+      
       const usecase = new ListUserUseCase();
       const result = await usecase.execute();
 

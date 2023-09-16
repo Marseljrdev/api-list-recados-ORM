@@ -1,5 +1,6 @@
 import { StatusErrand } from "../../../models/errand";
 import { Result } from "../../../shared/contracts/result.contracts";
+import { RedisRepository } from "../../../shared/database/repositories/redis.repository";
 import { Response } from "../../../shared/utils/response.adapter";
 import { UserRepository } from "../../user/repositories/user.repository";
 import { ErrandRepository } from "../repositories/errand.repository";
@@ -33,7 +34,9 @@ export class UpdateRecadosUseCase {
         errand.description = params.description;
         errand.type = params.type;
   
-        const result = await errandRepository.update(errand);
+        await errandRepository.update(errand);
+        await new RedisRepository().delete(`recados - ${params.userId}`);
+        await new RedisRepository().delete(`recados - ${params.idErrand}`);
   
         const errands = await errandRepository.listErrands({
           userId: params.userId,

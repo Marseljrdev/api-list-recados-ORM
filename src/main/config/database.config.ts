@@ -14,7 +14,7 @@ if (process.env.DB_ENV === "production") {
 const config = new DataSource({
   type: "postgres",
   port: 5432,
-  url: process.env.URL,
+  url: process.env.DB_URL,
 
   ssl: {
     rejectUnauthorized: false,

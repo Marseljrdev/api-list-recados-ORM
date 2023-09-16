@@ -6,10 +6,10 @@ export const UserRoutes = () => {
     const app = Router({
         mergeParams: true
     })
-    app.post("/create",  new UserController().create);
-    app.post("/login", new UserController().login);
-    app.get("/list", new UserController().listAllUsers);
-    app.get("/list/:id",  new UserController().getUserById)
+    app.post("/api/v1/user", new UserController().create);
+    app.post("/api/v1/user/authenticate", new UserController().login);
+    app.get("/api/v1/users", new UserController().listAllUsers);
+    app.get("/api/v1/user/:id", new UserController().getUserById);
 
 
     return app
